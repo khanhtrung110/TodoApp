@@ -1,4 +1,4 @@
-# todo-app
+# chat-room
 
 ## Project setup
 ```
