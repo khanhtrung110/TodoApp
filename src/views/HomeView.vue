@@ -1,19 +1,24 @@
 <template>
   <div class="home">
-    <div v-if="projects.data.length">
-      <AddProject v-if="showAdd" :projects="projects" @post="handlePost" />
+      <AddProject v-if="showAdd" :projects="projects" @post="todoPost" />
       <div v-for="project in projects.data" :key="project.id">
-        <SingleProject :project="project" @delete="handleDelete" @edit ="handleEdit"/>
+        <SingleProject :project="project" @delete="todoDelete" @edit ="todoEdit"/>
       </div>
-    </div>
   </div>
   <button @click="clickAdd">Add Project</button>
+  <button @click="change1">A = A + 1</button>
+  <button @click="change2">B = B + 1</button>
+  <p>Number +A = {{ acomp }}</p>
+  <p>Number +B = {{ bcomp }}</p>
 </template>
 
 <script>
+import { reactive, ref, toRef,toRefs } from '@vue/reactivity';
 import AddProject from '../components/AddProject.vue'
 import SingleProject  from "../components/SingleProject.vue";
-import { reactive, ref, watch } from "vue"
+import getTodo from '../composables/getTodo'
+import { computed, watch, watchEffect } from '@vue/runtime-core';
+
 export default {
   name: 'Home',
   props: {
@@ -30,57 +35,43 @@ export default {
     AddProject
     },
     setup(){
-      const showAdd = ref(false)
-      let projects = reactive({data:[
-        {
-          "id": 1,
-          "title": "Create new homepage banner",
-          "details": "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsumlorem ipsum lorem ipsum lorem ipsum.",
-          "complete": true
-        },
-        {
-          "id": 2,
-          "title": "Make marketing email",
-          "details": "Lorem ipsum",
-          "complete": false
-        },
-        {
-          "title": "Update the Promso Links",
-          "details": "Make sure all the promo links and coupon codes are up to date!!!!!",
-          "complete": true,
-          "id": 3
-        }
-      ]})
-      const handleEdit = (item) => {
-          projects.data.forEach(project => {
-              if (project.id == item.id) {
-                project.title = item.title
-                project.details = item.details
-              }
-          });
-      }
-      
-      const handleDelete = (id) => {
-          projects.data = projects.data.filter((item)=>{
-              return item.id != id
-          })
-      }
-     
+      const { todoEdit, todoDelete, todoPost, projects, showAdd } = getTodo();
+      const a  = ref(0)
+      const b = ref(0)
+      const number = ref(20)
       const clickAdd = () =>{
         showAdd.value = true
       }
-      const handlePost = (item)=>{
-        projects.data.push(item)
-        showAdd.value = false
+      const change1 =()=>{
+       
+        return a.value += 1
       }
-
+      const change2 = () =>{
+        return b.value += 1
+      }
+     
+     const acomp = computed(()=>{
+         return b.value;
+      }) 
+      const bcomp = computed(()=>{
+         return b.value + a.value
+      })
+      const hehe = toRef(projects.value, 'data')
+      
       return {
         projects, 
-        handleDelete, 
+        todoDelete, 
         showAdd, 
         clickAdd,
-        handlePost,
-        handleEdit
+        todoEdit,
+        todoPost,
+        showAdd,
+        change1,
+        change2,
+        a,
+        b,
+        acomp,
+        bcomp
       }
     },
 }

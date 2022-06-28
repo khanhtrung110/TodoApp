@@ -1,22 +1,18 @@
 <template>
-   <!-- <p>Welcome {{alertText}}</p>  -->
   <router-view/>
 </template>
 
-<script>
-// import {ref} from 'vue';
-
-export default ({
-  // setup() {
-  //   const alertText = ref('notyet');
-  //   return {
-  //     alertText,
-  //   }
-  // },
-})
-</script>
-
-
 <style>
+body{
+  background: #f2f2f2;
+}
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+    max-width: 600px;
+    margin: 0 auto;
+    color: #555;
+}
 
 </style>
